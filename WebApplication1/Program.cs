@@ -22,4 +22,8 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+// Configure the default route
+app.MapFallbackToPage("/", "/Streaming");
+
+
 app.Run();

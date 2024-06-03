@@ -1,0 +1,38 @@
+﻿@page
+@model StreamingModel
+@{
+    ViewData["Title"] = "Streaming Page";
+}
+
+<h1>Number Stream</h1>
+
+<form method="post">
+    <label for="upperBound">Enter Upper Bound:</label>
+    <input type="number" id="upperBound" name="upperBound" />
+    <button type="submit">Start Stream</button>
+</form>
+
+<div id="numberStream"></div>
+
+@if (Model.UpperBound.HasValue)
+{
+    <input type="hidden" id="upperBoundValue" value="@Model.UpperBound" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const upperBound = document.getElementById("upperBoundValue").value;
+            const eventSource = new EventSource(`/Streaming?handler=StreamNumbers&upperBound=${upperBound}`);
+
+            eventSource.onmessage = function (event) {
+                const newElement = document.createElement("div");
+                newElement.textContent = event.data;
+                document.getElementById("numberStream").appendChild(newElement);
+            };
+
+            eventSource.onerror = function (event) {
+                console.error("EventSource failed:", event);
+                eventSource.close();
+            };
+        });
+    </script>
+}

@@ -2,7 +2,7 @@
 {
     public class AwesomeAlgoClass
     {
-        public async IAsyncEnumerable<string> CountToUpperBoundAsync(int upperBound)
+        public static async IAsyncEnumerable<string> CountToUpperBoundAsync(int upperBound)
         {
 
             for (int i = 0; i < upperBound; i++)

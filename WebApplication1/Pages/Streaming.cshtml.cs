@@ -6,13 +6,13 @@ namespace WebApplication1.Pages;
 
 public class StreamingModel : PageModel
 {
-    private readonly AwesomeAlgoClass _streamer;
+    private readonly StreamingAlgo _streamer;
 
     public int? UpperBound { get; private set; }
 
     public StreamingModel()
     {
-        _streamer = new AwesomeAlgoClass();
+        _streamer = new StreamingAlgo();
     }
 
     public void OnGet(int? upperBound)
@@ -29,10 +29,21 @@ public class StreamingModel : PageModel
     {
         Response.ContentType = "text/event-stream";
 
-        await foreach (var number in AwesomeAlgoClass.CountToUpperBoundAsync(upperBound))
+        var pairManager = new NumberNamePairManager();
+        pairManager.AddOrReplacePair(3, "Joe");
+        pairManager.AddOrReplacePair(5, "Cuevas");
+        pairManager.AddOrReplacePair(7, "Steve");
+        pairManager.AddOrReplacePair(20, "Sanderson");
+        pairManager.AddOrReplacePair(50, "Dan");
+        pairManager.AddOrReplacePair(100, "Roth");
+        pairManager.AddOrReplacePair(3, "Jose");
+
+        var position = 1;
+        await foreach (var number in StreamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, upperBound))
         {
-            await Response.WriteAsync($"data: {number}\n\n");
+            await Response.WriteAsync($"data:[{position}]: {number}\n\n");
             await Response.Body.FlushAsync();
+            position++;
         }
 
         return new EmptyResult();

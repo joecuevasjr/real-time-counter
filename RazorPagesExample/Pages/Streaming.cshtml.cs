@@ -11,10 +11,10 @@ public class StreamingModel : PageModel
     public int UpperBound { get; set; }
 
     [BindProperty]
-    public List<int> Numbers { get; set; }
+    public List<int> Numbers { get; set; } = [];
 
     [BindProperty]
-    public List<string> Names { get; set; }
+    public List<string> Names { get; set; } = [];
 
     public void OnGet()
     {

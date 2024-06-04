@@ -12,7 +12,9 @@ public class StreamingAlgo
             var value = i + 1;
             string result = pairManager.GetNameForNumber(value);
             yield return result;
-            await Task.Delay(50); // Simulate delay
+
+            // Simulate delay
+            await Task.Delay(50); 
         }
     }
 }

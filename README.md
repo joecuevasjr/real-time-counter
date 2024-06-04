@@ -41,12 +41,25 @@ var pairManager = new NumberNamePairManager();
 ````
 
 #### Adding or Replacing Pairs
+
 ````csharp
 // Adding a new pair
-pairManager.AddOrReplacePair(3, "Fizz");
+pairManager.AddOrReplacePair(3, "Joe");
 
 // Replacing an existing pair
-pairManager.AddOrReplacePair(3, "Buzz");
+pairManager.AddOrReplacePair(3, "Jose");
+````
+
+#### Streaming Results
+
+To stream results based on the pairs and an upper boundary:
+
+````csharp
+var streamingAlgo = new StreamingAlgo();
+await foreach (var item in streamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, 100))
+{
+    Console.WriteLine(item);
+}
 ````
 
 ## Example Project

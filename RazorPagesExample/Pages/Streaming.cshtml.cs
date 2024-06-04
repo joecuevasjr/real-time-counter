@@ -1,7 +1,6 @@
 using AwesomeAlgo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Pages;
 
@@ -33,9 +32,9 @@ public class StreamingModel : PageModel
             }
 
             int position = 1;
-            await foreach (var number in StreamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, UpperBound))
+            await foreach (var item in StreamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, UpperBound))
             {
-                await Response.WriteAsync($"[{position}]: {number}\n\n");
+                await Response.WriteAsync($"[{position}]: {item}\n\n");
                 await Response.Body.FlushAsync();
                 position++;
             }
@@ -52,7 +51,7 @@ public class StreamingModel : PageModel
         }
         catch (Exception ex)
         {
-            // Log the exception details here
+            // Log the exception details using ILogger and a logger provider instead of using Console.Writeline
             Console.WriteLine(ex);
 
             // Redirect to the generic error page

@@ -1,51 +1,62 @@
 using AwesomeAlgo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApplication1.Pages;
 
 public class StreamingModel : PageModel
 {
-    private readonly StreamingAlgo _streamer;
+    [BindProperty]
+    public int UpperBound { get; set; }
 
-    public int? UpperBound { get; private set; }
+    [BindProperty]
+    public List<int> Numbers { get; set; }
 
-    public StreamingModel()
+    [BindProperty]
+    public List<string> Names { get; set; }
+
+    public void OnGet()
     {
-        _streamer = new StreamingAlgo();
     }
 
-    public void OnGet(int? upperBound)
+    public async Task<IActionResult> OnPostAsync()
     {
-        UpperBound = upperBound;
-    }
-
-    public IActionResult OnPost(int upperBound)
-    {
-        return RedirectToPage(new { upperBound }); // Redirect with upperBound as a query parameter
-    }
-
-    public async Task<IActionResult> OnGetStreamNumbers(int upperBound)
-    {
-        Response.ContentType = "text/event-stream";
-
-        var pairManager = new NumberNamePairManager();
-        pairManager.AddOrReplacePair(3, "Joe");
-        pairManager.AddOrReplacePair(5, "Cuevas");
-        pairManager.AddOrReplacePair(7, "Steve");
-        pairManager.AddOrReplacePair(20, "Sanderson");
-        pairManager.AddOrReplacePair(50, "Dan");
-        pairManager.AddOrReplacePair(100, "Roth");
-        pairManager.AddOrReplacePair(3, "Jose");
-
-        var position = 1;
-        await foreach (var number in StreamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, upperBound))
+        try
         {
-            await Response.WriteAsync($"data:[{position}]: {number}\n\n");
-            await Response.Body.FlushAsync();
-            position++;
-        }
+            Response.ContentType = "text/event-stream";
 
-        return new EmptyResult();
+            var pairManager = new NumberNamePairManager();
+            for (int i = 0; i < Numbers.Count; i++)
+            {
+                pairManager.AddOrReplacePair(Numbers[i], Names[i]);
+            }
+
+            int position = 1;
+            await foreach (var number in StreamingAlgo.MatchPairsUntilUpperBoundAsync(pairManager, UpperBound))
+            {
+                await Response.WriteAsync($"[{position}]: {number}\n\n");
+                await Response.Body.FlushAsync();
+                position++;
+            }
+
+            if (position == 1)
+            {
+                // This means UpperBound may have gone past Max Int Value
+                await Response.WriteAsync($"UpperBound Value is 0. Max value that can be used is 2,147,483,647 Go back and try again.");
+                await Response.Body.FlushAsync();
+            }
+
+            Response.Body.Close();
+            return new EmptyResult();
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details here
+            Console.WriteLine(ex);
+
+            // Redirect to the generic error page
+            return RedirectToPage("/Error");
+        }
     }
 }

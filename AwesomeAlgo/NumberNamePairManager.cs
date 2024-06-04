@@ -1,36 +1,43 @@
-﻿namespace AwesomeAlgo
+﻿namespace AwesomeAlgo;
+
+public class NumberNamePairManager
 {
-    public class NumberNamePairManager
+    private readonly Dictionary<int, string> _pairs = new Dictionary<int, string>();
+
+    public void AddOrReplacePair(int number, string name)
     {
-        private readonly Dictionary<int, string> _pairs = new Dictionary<int, string>();
+        if (number <= 0)
+            throw new ArgumentOutOfRangeException(nameof(number), "Number must be positive and greater than zero.");
+        
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
 
-        public void AddOrReplacePair(int number, string name)
+        bool isReplacing = _pairs.ContainsKey(number);
+        _pairs[number] = name;
+
+        if (isReplacing)
         {
-            if (_pairs.ContainsKey(number))
-            {
-                // "Log" the replacement
-                Console.WriteLine($"Replacing existing entry for number {number}.");
-            }
-
-            // Add or update pair
-            _pairs[number] = name;
+            Console.WriteLine($"Replacing existing Number/Name entry for number {number}.");
         }
-
-        public string GetNameForNumber(int number)
+        else
         {
-            List<string> names = new List<string>();
-            foreach (var pair in _pairs)
-            {
-                // Skip any pair with a zero number to avoid division by zero
-                if (pair.Key == 0)
-                    continue;  
-
-                if (number % pair.Key == 0)
-                {
-                    names.Add(pair.Value);
-                }
-            }
-            return names.Count > 0 ? string.Join(" ", names) : number.ToString();
+            Console.WriteLine($"Added new Number/Name entry for number {number}.");
         }
+    }
+
+    public string GetNameForNumber(int number)
+    {
+        if (number <= 0)
+            throw new ArgumentOutOfRangeException(nameof(number), "Number must be positive and greater than zero.");
+
+        List<string> names = new List<string>();
+        foreach (var pair in _pairs)
+        {
+            if (number % pair.Key == 0)
+            {
+                names.Add(pair.Value);
+            }
+        }
+        return names.Count > 0 ? string.Join(" ", names) : number.ToString();
     }
 }

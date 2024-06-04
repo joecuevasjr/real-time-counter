@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{D6796DA6-76F7-4836-8427-B0F0255F5339}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPagesExample", "RazorPagesExample\RazorPagesExample.csproj", "{D6796DA6-76F7-4836-8427-B0F0255F5339}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwesomeAlgo", "AwesomeAlgo\AwesomeAlgo.csproj", "{21B9DA1E-CF1B-42D7-84B0-CB36546C10FD}"
 EndProject

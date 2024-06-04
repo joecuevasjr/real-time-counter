@@ -1,9 +1,19 @@
 ﻿namespace AwesomeAlgo;
 
+/// <summary>
+/// Manages a collection of number-name pairs.
+/// </summary>
 public class NumberNamePairManager
 {
     private readonly Dictionary<int, string> _pairs = new Dictionary<int, string>();
 
+    /// <summary>
+    /// Adds or replaces a number-name pair in the collection.
+    /// </summary>
+    /// <param name="number">The number of the pair. Must be positive and greater than zero.</param>
+    /// <param name="name">The name of the pair. Must not be null or whitespace.</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the number is not positive and greater than zero.</exception>
+    /// <exception cref="ArgumentException">Thrown when the name is null or whitespace.</exception>
     public void AddOrReplacePair(int number, string name)
     {
         if (number <= 0)
@@ -25,6 +35,12 @@ public class NumberNamePairManager
         }
     }
 
+    /// <summary>
+    /// Gets the concatenated names for a given number based on the divisibility rules.
+    /// </summary>
+    /// <param name="number">The number to check divisibility against the pairs.</param>
+    /// <returns>A string representing the concatenated names or the number itself if no pairs are matched.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when the number is not positive and greater than zero.</exception>
     public string GetNameForNumber(int number)
     {
         if (number <= 0)

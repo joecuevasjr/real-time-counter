@@ -5,7 +5,7 @@
 /// </summary>
 public class NumberNamePairManager
 {
-    private readonly Dictionary<int, string> _pairs = new Dictionary<int, string>();
+    private readonly Dictionary<int, NumberNamePair> _pairs = new Dictionary<int, NumberNamePair>();
 
     /// <summary>
     /// Adds or replaces a number-name pair in the collection.
@@ -22,8 +22,10 @@ public class NumberNamePairManager
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Name cannot be null or whitespace.", nameof(name));
 
+        var pair = new NumberNamePair(number, name);
+        _pairs[number] = pair;
+
         bool isReplacing = _pairs.ContainsKey(number);
-        _pairs[number] = name;
 
         if (isReplacing)
         {
@@ -46,14 +48,11 @@ public class NumberNamePairManager
         if (number <= 0)
             throw new ArgumentOutOfRangeException(nameof(number), "Number must be positive and greater than zero.");
 
-        List<string> names = new List<string>();
-        foreach (var pair in _pairs)
-        {
-            if (number % pair.Key == 0)
-            {
-                names.Add(pair.Value);
-            }
-        }
+        var names = _pairs.Values
+            .Where(pair => number % pair.Number == 0)
+            .Select(pair => pair.Name)
+            .ToList();
+
         return names.Count > 0 ? string.Join(" ", names) : number.ToString();
     }
 }

@@ -1,9 +1,13 @@
-﻿namespace AwesomeAlgo;
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("AwesomeAlgo.Tests")]
+
+namespace AwesomeAlgo;
 
 /// <summary>
-/// Represents a number-name pair.
+/// Represents a number-name pair. This class is internal and not exposed to library users.
 /// </summary>
-public class NumberNamePair
+internal class NumberNamePair
 {
     /// <summary>
     /// Gets the number of the pair.
